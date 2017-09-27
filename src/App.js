@@ -8,7 +8,9 @@ class App extends Component {
     constructor(props){
         super(props);
         this.state = {
-            data: ''
+            data: '',
+            grade: '',
+            filteredGradeData: '',
         };
     }
 
@@ -27,18 +29,66 @@ class App extends Component {
         this.getResturantGradeData();
     }
 
+    handleGradeChange(e){
+        const newGradeData = this.state.data.filter((item) => {
+            console.log("item: ", item);
+            switch(e.target.value){
+                case "A":
+                    console.log("A");
+                    if(item.score <= 100 && item.score >= 90)
+                        return item;
+                    break;
+                case "B":
+                    console.log("B");
+                    if(item.score <= 89 && item.score >= 80)
+                        return item;
+                    break;
+                case "C":
+                    console.log("C");
+                    if(item.score <= 79 && item.score >= 70)
+                        return item;
+                    break;
+                case "lessC":
+                    console.log("Less than C");
+                    if(item.score < 70)
+                        return item;
+                    break;
+                default:
+                    console.log("DO NOTHING");
+                    break;
+            }
+        });
+        this.setState({
+            grade: e.target.value,
+            filteredGradeData: newGradeData
+        })
+    }
+
     render() {
         return (
-        <div className="App">
-            <div className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <h2>Restaurant Grades</h2>
+            <div className="App">
+                <div className="App-header">
+                    <img src={logo} className="App-logo" alt="logo" />
+                    <h2>Restaurant Grades</h2>
+                </div>
+                <label>Grade</label>
+                <select
+                    name="grade"
+                    id=""
+                    value={this.state.grade}
+                    onChange={(e) => this.handleGradeChange(e)}
+                >
+                    <option value=""></option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="lessC">less than C</option>
+                </select>
+                 <p className="App-intro">
+                    {JSON.stringify(this.state.filteredGradeData)}
+                </p>
             </div>
-            <p className="App-intro">
-                {JSON.stringify(this.state.data)}
-            </p>
-        </div>
-        );
+            );
         }
     }
 
